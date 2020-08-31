@@ -30,30 +30,9 @@ os.remove("./raw_data/" + month + "data.zip")
 print("Unzipped and removed non-data files")
 
 ### make new merged data file---
-os.mkdir("./merged_data/"+ month +"/")
+os.makedirs("./merged_data/" + month + "/")
 
 print("Created " + month + " directory.")
-
-## Plan: get list of IDRSSDs from one file and then use loop to merge in the rest of the files.
-## file changed name after 20071231
-# if int(quarter) == 20071231:
-PD_NA = pd.read_csv("./raw_data/All_Reports_"+ month +"_- PD & NA Loans Wholly or Partially US Gvmt Guaranteed.csv", encoding = "ISO-8859-1")
-# else:
-# PD_NA = pd.read_csv("./raw_data/All_Reports_"+ quarter +"_- Past Due and Nonaccrual Loans Wholly or Partially US Gvmt Guaranteed.csv", encoding = "ISO-8859-1")
-
-## drop column we dont want
-
-columns_to_drop = ['inst.webaddr', 'cbsa_metro', 'mutual', 'cert', 'docket', 'rssdhcr','name', 'city', 'stalp', 'zip', 'repdte','rundate','bkclass','address','namehcr', 'county','cbsa_metro_name','estymd', 'offdom', 'offfor', 'stmult', 'specgrp', 'subchaps', 'insdate', 'effdate', 'parcert', 'trust', 'regagnt', 'insagnt1', 'fdicdbs', 'fdicsupv', 'fldoff', 'fed', 'occdist', 'otsregnm', 'offoa', 'cb']
-
-columns_to_drop_plus_fed_rssd = ['fed_rssd', 'inst.webaddr', 'cbsa_metro', 'mutual', 'cert', 'docket', 'rssdhcr','name', 'city', 'stalp', 'zip', 'repdte','rundate','bkclass','address','namehcr', 'county','cbsa_metro_name','estymd', 'offdom', 'offfor', 'stmult', 'specgrp', 'subchaps', 'insdate', 'effdate', 'parcert', 'trust', 'regagnt', 'insagnt1', 'fdicdbs', 'fdicsupv', 'fldoff', 'fed', 'occdist', 'otsregnm', 'offoa', 'cb']
-
-### need to fix the below to put the fed_rssd in the bank data table
-## getting an error, may have to use isin from pandas: https://stackoverflow.com/questions/19960077/how-to-implement-in-and-not-in-for-pandas-dataframe
-## this is the error: KeyError: "['offoa', 'cb'] not in index"
-bank_data = pd.DataFrame(PD_NA[PD_NA.columns & columns_to_drop_plus_fed_rssd])
-data = pd.DataFrame(PD_NA['fed_rssd'])
-
-## game plan:  take all repetitive data and put into one file.  then on read for each table remove all the repetitive data except fed_rssd and merge
 
 ### read new data and merge--------
 
